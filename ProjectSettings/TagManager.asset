@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Damage
+  - CoinText
+  - Strawberry
   layers:
   - Default
   - TransparentFX
