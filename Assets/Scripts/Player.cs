@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        audioSource = GetComponent<AudioSource>();   
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
             extraJumps = extraJumpValues;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isGrounded)
             {
@@ -85,9 +85,9 @@ public class Player : MonoBehaviour
 
     private void SetAnimations(float moveInput)
     {
-        if(isGrounded)
+        if (isGrounded)
         {
-            if(moveInput == 0)
+            if (moveInput == 0)
             {
                 animator.Play("Player_Idle");
             }
@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if(rb.velocity.y > 0)
+            if (rb.velocity.y > 0)
             {
                 animator.Play("Player_Jump");
             }
@@ -109,15 +109,15 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) 
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Damage"))
+        if (collision.gameObject.CompareTag("Damage"))
         {
             PlaySFX(hurtClip);
             health -= 25;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             StartCoroutine(FlashRed());
-            if(health <= 0)
+            if (health <= 0)
             {
                 Die();
             }
@@ -141,5 +141,15 @@ public class Player : MonoBehaviour
         audioSource.clip = audioClip;
         audioSource.volume = volume;
         audioSource.Play();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Strawberry")
+        {
+            health += 20;
+            if (health > 100) health = 100;
+            Destroy(collision.gameObject);
+        }
     }
 }
