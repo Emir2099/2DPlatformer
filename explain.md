@@ -303,7 +303,3 @@ Scene doesn’t restart:
 - Reaching the flag shows Win UI and pauses the game.
 - Restart button reloads the scene and resumes time.
 - No runtime exceptions when all public fields are set.
-
-
-# more levels
-file - build profiles - scene list - drag and drop levels
