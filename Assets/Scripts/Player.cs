@@ -12,9 +12,14 @@ public class Player : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public Image healthImage;
+
+    public AudioClip jumpClip;
+    public AudioClip hurtClip;
+
     private Rigidbody2D rb;
     private bool isGrounded;
 
+    private AudioSource audioSource;
     private Animator animator;
 
     private SpriteRenderer spriteRenderer;
@@ -30,6 +35,8 @@ public class Player : MonoBehaviour
         extraJumps = extraJumpValues;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        audioSource = GetComponent<AudioSource>();   
     }
 
     void Update()
@@ -45,15 +52,17 @@ public class Player : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            if(isGrounded)
+            if (isGrounded)
             {
-            // Apply jump by setting the upward velocity
+                // Apply jump by setting the upward velocity
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                PlaySFX(jumpClip);
             }
-            else if(extraJumps > 0)
+            else if (extraJumps > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 extraJumps--;
+                PlaySFX(jumpClip);
             }
         }
 
@@ -104,6 +113,7 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Damage"))
         {
+            PlaySFX(hurtClip);
             health -= 25;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             StartCoroutine(FlashRed());
@@ -124,5 +134,12 @@ public class Player : MonoBehaviour
     private void Die()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    public void PlaySFX(AudioClip audioClip, float volume = 1f)
+    {
+        audioSource.clip = audioClip;
+        audioSource.volume = volume;
+        audioSource.Play();
     }
 }
