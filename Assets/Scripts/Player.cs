@@ -153,3 +153,10 @@ public class Player : MonoBehaviour
         }
     }
 }
+
+// create -> 2D -> Tile Palette -> Rectangle 
+// Click on window -> 2D -> Tile Palette
+// Drag and drop the platform combined sprite to the Tile Palette
+// In hierarchy create empty game object -> name it "Ground" 
+// Add 2D as child of Ground -> Tilemap -> Rectangular
+// Select the Tile Palette window -> select the brush tool -> select the platform sprite -> paint on the Tilemap in the scene view

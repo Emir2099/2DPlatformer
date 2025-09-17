@@ -303,3 +303,170 @@ Scene doesn’t restart:
 - Reaching the flag shows Win UI and pauses the game.
 - Restart button reloads the scene and resumes time.
 - No runtime exceptions when all public fields are set.
+
+
+## 15) Sound Effects (SFX) Implementation
+
+Goal: Play jump, coin pickup, damage, and win SFX at the right times.
+
+1) Import audio clips into `Assets/Audio/` (e.g., `jump.wav`, `coin.wav`, `hit.wav`, `win.wav`).
+
+2) Add an `AudioSource` to Player and UI as needed
+- On Player: add an `AudioSource` (uncheck Play On Awake). Assign `jump` and `hit` clips via script or an `AudioManager`.
+- On the scene or a UI object: optional `AudioSource` for `win` sound.
+
+3) Minimal code pattern (inside `Player.cs`):
+
+```csharp
+[SerializeField] private AudioSource sfx;
+[SerializeField] private AudioClip jumpClip, hitClip;
+
+private void PlaySfx(AudioClip clip)
+{
+    if (clip != null && sfx != null)
+        sfx.PlayOneShot(clip);
+}
+
+// On jump success
+PlaySfx(jumpClip);
+
+// On damage
+PlaySfx(hitClip);
+```
+
+4) Coin pickup SFX (inside `Coin.cs`):
+- Either: add an `AudioSource` on the Coin and `PlayOneShot` before `Destroy(gameObject)`.
+- Or: call a central `AudioManager.Instance.Play("coin")` then destroy coin.
+
+
+## 16) Pause Screen (UI) and Resume
+
+Goal: Toggle a Pause menu that stops time and shows UI.
+
+1) Create a Canvas with a `PausePanel` GameObject (inactive by default) containing Resume and Quit buttons.
+
+2) Add a `PauseController` script to a manager object:
+
+```csharp
+public class PauseController : MonoBehaviour
+{
+    public GameObject pausePanel;
+    private bool paused;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) Toggle();
+    }
+
+    public void Toggle()
+    {
+        paused = !paused;
+        Time.timeScale = paused ? 0f : 1f;
+        pausePanel.SetActive(paused);
+    }
+
+    public void Resume()
+    {
+        paused = false;
+        Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+    }
+}
+```
+
+3) Wire UI buttons: Resume → `PauseController.Resume()`; Escape key toggles pause.
+
+
+## 17) Next Level Button (Level Progression)
+
+Goal: Advance to the next scene in Build Settings.
+
+1) Add your scenes to File > Build Settings > Scenes In Build in the correct order.
+
+2) Create a `LevelLoader` script:
+
+```csharp
+using UnityEngine.SceneManagement;
+
+public class LevelLoader : MonoBehaviour
+{
+    public void LoadNext()
+    {
+        int idx = SceneManager.GetActiveScene().buildIndex;
+        if (idx + 1 < SceneManager.sceneCountInBuildSettings)
+            SceneManager.LoadScene(idx + 1);
+        else
+            SceneManager.LoadScene(0); // loop to first or show credits
+    }
+}
+```
+
+3) On Win UI, add a "Next Level" button and hook `LevelLoader.LoadNext()`.
+
+
+## 18) Coin Text UI (HUD)
+
+Goal: Display the current coin count as text on screen.
+
+1) In Canvas, add a Text (TextMeshPro or legacy Text). Example with TextMeshPro:
+- Install TextMeshPro if prompted and import TMP Essentials.
+- Create UI > Text - TextMeshPro. Name it `CoinText`.
+
+2) Update text from `Player` or a small HUD script:
+
+```csharp
+using TMPro;
+
+public class CoinHUD : MonoBehaviour
+{
+    public Player player;
+    public TMP_Text coinText;
+
+    void Update()
+    {
+        coinText.text = $"Coins: {player.coins}";
+    }
+}
+```
+
+3) Drag `Player` and `CoinText` references in the Inspector.
+
+
+## 19) Health Increase Power-up
+
+Goal: A pickup that increases the player’s health and updates the UI.
+
+1) Create a `HealthPickup` prefab with a Collider2D set to `Is Trigger` and an identifying tag (e.g., `Health`).
+
+2) Script:
+
+```csharp
+public class HealthPickup : MonoBehaviour
+{
+    public int amount = 25;
+    public AudioClip pickupClip;
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        var player = other.GetComponent<Player>();
+        if (player == null) return;
+
+        player.health = Mathf.Clamp(player.health + amount, 0, 100);
+        if (player.healthImage != null)
+            player.healthImage.fillAmount = player.health / 100f;
+
+        // optional SFX
+        var src = GetComponent<AudioSource>();
+        if (pickupClip != null)
+        {
+            if (src == null) src = gameObject.AddComponent<AudioSource>();
+            src.PlayOneShot(pickupClip);
+        }
+
+        Destroy(gameObject);
+    }
+}
+```
+
+3) Place the pickup in the scene; assign `amount` and `pickupClip`.
