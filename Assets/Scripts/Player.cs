@@ -68,6 +68,15 @@ public class Player : MonoBehaviour
 
         SetAnimations(moveInput);
         healthImage.fillAmount = health / 100f;
+
+        if (rb.velocity.y < 0)
+        {
+            rb.gravityScale = 3f;
+        }
+        else
+        {
+            rb.gravityScale = 2f;
+        }
     }
 
     private void FixedUpdate()
