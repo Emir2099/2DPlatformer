@@ -2442,6 +2442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextLevelName: Level2
+  nextLevelValue: 2
 --- !u!114 &596815083
 MonoBehaviour:
   m_ObjectHideFlags: 0
