@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 
     public AudioClip jumpClip;
     public AudioClip hurtClip;
+    public AudioClip springClip;
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -56,12 +57,14 @@ public class Player : MonoBehaviour
             {
                 // Apply jump by setting the upward velocity
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                // Always play the regular jump sound
                 PlaySFX(jumpClip);
             }
             else if (extraJumps > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 extraJumps--;
+                // Always play the regular jump sound for extra jumps
                 PlaySFX(jumpClip);
             }
         }
@@ -135,6 +138,12 @@ public class Player : MonoBehaviour
         {
             // Apply bounce velocity
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.33f);
+
+            // Play spring sound when hitting a bounce pad (only if assigned)
+            if (springClip != null)
+            {
+                PlaySFX(springClip);
+            }
 
             // Trigger the bounce pad visual animation if the pad has a BouncePad component.
             // Use GetComponentInParent to be robust if the collider is on a child object.

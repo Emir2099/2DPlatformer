@@ -3678,6 +3678,7 @@ MonoBehaviour:
   healthImage: {fileID: 448351683}
   jumpClip: {fileID: 8300000, guid: 3907b9a66967648e0bd353f41fa2b1e5, type: 3}
   hurtClip: {fileID: 8300000, guid: 3dc7d265f9c42437492a59228fc7b6d7, type: 3}
+  springClip: {fileID: 8300000, guid: 8be746151c6e6454ea3576a15bc7559e, type: 3}
   extraJumpValues: 1
 --- !u!95 &1237054587
 Animator:
