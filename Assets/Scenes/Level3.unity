@@ -547,6 +547,7 @@ GameObject:
   - component: {fileID: 176386711}
   - component: {fileID: 176386710}
   - component: {fileID: 176386712}
+  - component: {fileID: 176386713}
   m_Layer: 0
   m_Name: BouncePad
   m_TagString: BouncePad
@@ -670,6 +671,24 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 16.875, y: 12.5}
   m_EdgeRadius: 0
+--- !u!114 &176386713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176386708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b87289f0dd9742446ae88e8895a21854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: -2189936557494267560, guid: 91dc780a32cb84f458fd84b5b15e2f33, type: 3}
+  - {fileID: 3961330090195017726, guid: fe5f025d452777b4eaba46498b085b6e, type: 3}
+  - {fileID: -2664497402470873898, guid: 1a759195afd59674589e1f0380803f8d, type: 3}
+  - {fileID: -1694894654627329521, guid: f0ef0bc228f87034ea64444472457636, type: 3}
+  frameDuration: 0.04
 --- !u!1 &188284330
 GameObject:
   m_ObjectHideFlags: 0

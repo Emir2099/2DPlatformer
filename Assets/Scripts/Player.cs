@@ -133,7 +133,16 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("BouncePad"))
         {
+            // Apply bounce velocity
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.33f);
+
+            // Trigger the bounce pad visual animation if the pad has a BouncePad component.
+            // Use GetComponentInParent to be robust if the collider is on a child object.
+            var bouncePad = collision.gameObject.GetComponent<BouncePad>() ?? collision.gameObject.GetComponentInParent<BouncePad>();
+            if (bouncePad != null)
+            {
+                bouncePad.Trigger();
+            }
         }
     }
 
